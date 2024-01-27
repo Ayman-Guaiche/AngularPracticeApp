@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../services/product.service';
+import { Product } from 'model/product.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -8,7 +10,7 @@ import { ProductService } from '../services/product.service';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-  products : Array<any> = [];
+  products$! : Observable<Array<Product>>
   constructor(private ps:ProductService){
 
   }
@@ -16,14 +18,17 @@ export class ProductsComponent implements OnInit {
     this.getProducts();
   }
   getProducts(){
-    this.ps.getProducts()
-      .subscribe({
-        next:data => {this.products = data},
-        error:err => {console.log(err);}
-      })
-    ;
+    this.products$ = this.ps.getProducts().pipe();
+    // this.ps.getProducts()
+    //   .subscribe({
+    //     next:data => {this.products = data},
+    //     error:err => {console.log(err);}
+    //   })
+    
   }
-  handleCheckProduct(product: any) {
+  handleCheckProduct(product: Product) {
+    
+    
     this.ps.checkProducts(product)
     .subscribe({next:updatedProduct => {
       this.getProducts();

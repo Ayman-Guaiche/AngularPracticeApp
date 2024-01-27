@@ -10,7 +10,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let product of products">
+                    <tr *ngFor="let product of products$ | async">
                         <td>{{product.name}}</td>
                         <td>{{product.price}}</td>
                         <td><button (click)="handleCheckProduct(product)" class="btn btn-outline-success ">
