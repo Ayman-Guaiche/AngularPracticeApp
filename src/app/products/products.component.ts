@@ -10,7 +10,16 @@ import { Observable } from 'rxjs';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-  products$! : Observable<Array<Product>>
+  handleDelete(product: Product) {
+    if(confirm("Etes vous sûr ?"))
+    this.ps.deleteProduct(product).subscribe({
+      next: value =>{ this.products = this.products.filter(p => p.id != product.id)
+      }
+    });
+    
+  
+}
+  products : Array<Product> = []
   constructor(private ps:ProductService){
 
   }
@@ -18,12 +27,12 @@ export class ProductsComponent implements OnInit {
     this.getProducts();
   }
   getProducts(){
-    this.products$ = this.ps.getProducts().pipe();
-    // this.ps.getProducts()
-    //   .subscribe({
-    //     next:data => {this.products = data},
-    //     error:err => {console.log(err);}
-    //   })
+    //this.products$ = this.ps.getProducts().pipe();
+    this.ps.getProducts()
+       .subscribe({
+         next:data => {this.products = data},
+        error:err => {console.log(err);}
+    })
     
   }
   handleCheckProduct(product: Product) {
